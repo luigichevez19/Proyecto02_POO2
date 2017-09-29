@@ -6,7 +6,7 @@
 package com.sv.udb.modelos;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,11 +44,12 @@ public class EstadosEntrega implements Serializable {
     @Column(name = "codi_esta")
     private Integer codiEsta;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_esta")
     private String nombEsta;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiEsta", fetch = FetchType.EAGER)
-    private List<Entregas> entregasList;
+    private Collection<Entregas> entregasCollection;
 
     public EstadosEntrega() {
     }
@@ -79,12 +80,12 @@ public class EstadosEntrega implements Serializable {
     }
 
     @XmlTransient
-    public List<Entregas> getEntregasList() {
-        return entregasList;
+    public Collection<Entregas> getEntregasCollection() {
+        return entregasCollection;
     }
 
-    public void setEntregasList(List<Entregas> entregasList) {
-        this.entregasList = entregasList;
+    public void setEntregasCollection(Collection<Entregas> entregasCollection) {
+        this.entregasCollection = entregasCollection;
     }
 
     @Override

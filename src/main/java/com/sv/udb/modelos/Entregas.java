@@ -38,9 +38,11 @@ public class Entregas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @NotNull
     @Column(name = "codi_entr")
     private Integer codiEntr;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
@@ -53,6 +55,9 @@ public class Entregas implements Serializable {
     @JoinColumn(name = "codi_esta", referencedColumnName = "codi_esta")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosEntrega codiEsta;
+    @JoinColumn(name = "codi_usua", referencedColumnName = "codi_usua")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Usuarios codiUsua;
 
     public Entregas() {
     }
@@ -104,6 +109,14 @@ public class Entregas implements Serializable {
 
     public void setCodiEsta(EstadosEntrega codiEsta) {
         this.codiEsta = codiEsta;
+    }
+
+    public Usuarios getCodiUsua() {
+        return codiUsua;
+    }
+
+    public void setCodiUsua(Usuarios codiUsua) {
+        this.codiUsua = codiUsua;
     }
 
     @Override

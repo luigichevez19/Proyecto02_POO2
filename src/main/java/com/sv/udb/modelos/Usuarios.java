@@ -6,7 +6,9 @@
 package com.sv.udb.modelos;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,10 +19,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -43,12 +47,16 @@ public class Usuarios implements Serializable {
     @Column(name = "codi_usua")
     private Integer codiUsua;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_usua")
     private String nombUsua;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "esta")
     private boolean esta;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiUsua", fetch = FetchType.EAGER)
+    private Collection<Entregas> entregasCollection;
     @JoinColumn(name = "codi_tipo", referencedColumnName = "codi_tipo")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TipoUsuarios codiTipo;
@@ -88,6 +96,15 @@ public class Usuarios implements Serializable {
 
     public void setEsta(boolean esta) {
         this.esta = esta;
+    }
+
+    @XmlTransient
+    public Collection<Entregas> getEntregasCollection() {
+        return entregasCollection;
+    }
+
+    public void setEntregasCollection(Collection<Entregas> entregasCollection) {
+        this.entregasCollection = entregasCollection;
     }
 
     public TipoUsuarios getCodiTipo() {

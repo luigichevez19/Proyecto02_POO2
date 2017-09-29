@@ -6,8 +6,8 @@
 package com.sv.udb.modelos;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,6 +49,7 @@ public class Lotes implements Serializable {
     @Column(name = "codi_lote")
     private Integer codiLote;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "cant")
     private int cant;
     @Basic(optional = false)
@@ -57,14 +58,16 @@ public class Lotes implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechVenc;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "fech_regi")
     @Temporal(TemporalType.DATE)
     private Date fechRegi;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "prec")
     private int prec;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiLote", fetch = FetchType.EAGER)
-    private List<Entregas> entregasList;
+    private Collection<Entregas> entregasCollection;
 
     public Lotes() {
     }
@@ -122,12 +125,12 @@ public class Lotes implements Serializable {
     }
 
     @XmlTransient
-    public List<Entregas> getEntregasList() {
-        return entregasList;
+    public Collection<Entregas> getEntregasCollection() {
+        return entregasCollection;
     }
 
-    public void setEntregasList(List<Entregas> entregasList) {
-        this.entregasList = entregasList;
+    public void setEntregasCollection(Collection<Entregas> entregasCollection) {
+        this.entregasCollection = entregasCollection;
     }
 
     @Override

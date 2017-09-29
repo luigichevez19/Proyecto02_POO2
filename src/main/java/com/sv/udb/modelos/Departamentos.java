@@ -6,7 +6,7 @@
 package com.sv.udb.modelos;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,11 +44,12 @@ public class Departamentos implements Serializable {
     @Column(name = "codi_depa")
     private Integer codiDepa;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_depa")
     private String nombDepa;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiDepa", fetch = FetchType.EAGER)
-    private List<Escuelas> escuelasList;
+    private Collection<Escuelas> escuelasCollection;
 
     public Departamentos() {
     }
@@ -79,12 +80,12 @@ public class Departamentos implements Serializable {
     }
 
     @XmlTransient
-    public List<Escuelas> getEscuelasList() {
-        return escuelasList;
+    public Collection<Escuelas> getEscuelasCollection() {
+        return escuelasCollection;
     }
 
-    public void setEscuelasList(List<Escuelas> escuelasList) {
-        this.escuelasList = escuelasList;
+    public void setEscuelasCollection(Collection<Escuelas> escuelasCollection) {
+        this.escuelasCollection = escuelasCollection;
     }
 
     @Override

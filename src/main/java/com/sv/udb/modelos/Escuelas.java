@@ -6,7 +6,7 @@
 package com.sv.udb.modelos;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,21 +49,25 @@ public class Escuelas implements Serializable {
     @Column(name = "codi_escu")
     private Integer codiEscu;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "nomb_escu")
     private String nombEscu;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "nomb_enca")
     private String nombEnca;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "cant_alum")
     private int cantAlum;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "esta")
     private boolean esta;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiEscu", fetch = FetchType.EAGER)
-    private List<Entregas> entregasList;
+    private Collection<Entregas> entregasCollection;
     @JoinColumn(name = "codi_depa", referencedColumnName = "codi_depa")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Departamentos codiDepa;
@@ -124,12 +128,12 @@ public class Escuelas implements Serializable {
     }
 
     @XmlTransient
-    public List<Entregas> getEntregasList() {
-        return entregasList;
+    public Collection<Entregas> getEntregasCollection() {
+        return entregasCollection;
     }
 
-    public void setEntregasList(List<Entregas> entregasList) {
-        this.entregasList = entregasList;
+    public void setEntregasCollection(Collection<Entregas> entregasCollection) {
+        this.entregasCollection = entregasCollection;
     }
 
     public Departamentos getCodiDepa() {
