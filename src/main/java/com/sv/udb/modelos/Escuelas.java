@@ -6,9 +6,7 @@
 package com.sv.udb.modelos;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,12 +17,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Escuelas.findByNombEscu", query = "SELECT e FROM Escuelas e WHERE e.nombEscu = :nombEscu")
     , @NamedQuery(name = "Escuelas.findByNombEnca", query = "SELECT e FROM Escuelas e WHERE e.nombEnca = :nombEnca")
     , @NamedQuery(name = "Escuelas.findByCantAlum", query = "SELECT e FROM Escuelas e WHERE e.cantAlum = :cantAlum")
+    , @NamedQuery(name = "Escuelas.findByDire", query = "SELECT e FROM Escuelas e WHERE e.dire = :dire")
     , @NamedQuery(name = "Escuelas.findByEsta", query = "SELECT e FROM Escuelas e WHERE e.esta = :esta")})
 public class Escuelas implements Serializable {
 
@@ -60,10 +57,12 @@ public class Escuelas implements Serializable {
     @Column(name = "cant_alum")
     private int cantAlum;
     @Basic(optional = false)
+    @Size(min = 1, max = 300)
+    @Column(name = "dire")
+    private String dire;
+    @Basic(optional = false)
     @Column(name = "esta")
     private boolean esta;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiEscu", fetch = FetchType.EAGER)
-    private Collection<Entregas> entregasCollection;
     @JoinColumn(name = "codi_depa", referencedColumnName = "codi_depa")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Departamentos codiDepa;
@@ -75,11 +74,12 @@ public class Escuelas implements Serializable {
         this.codiEscu = codiEscu;
     }
 
-    public Escuelas(Integer codiEscu, String nombEscu, String nombEnca, int cantAlum, boolean esta) {
+    public Escuelas(Integer codiEscu, String nombEscu, String nombEnca, int cantAlum, String dire, boolean esta) {
         this.codiEscu = codiEscu;
         this.nombEscu = nombEscu;
         this.nombEnca = nombEnca;
         this.cantAlum = cantAlum;
+        this.dire = dire;
         this.esta = esta;
     }
 
@@ -115,21 +115,20 @@ public class Escuelas implements Serializable {
         this.cantAlum = cantAlum;
     }
 
+    public String getDire() {
+        return dire;
+    }
+
+    public void setDire(String dire) {
+        this.dire = dire;
+    }
+
     public boolean getEsta() {
         return esta;
     }
 
     public void setEsta(boolean esta) {
         this.esta = esta;
-    }
-
-    @XmlTransient
-    public Collection<Entregas> getEntregasCollection() {
-        return entregasCollection;
-    }
-
-    public void setEntregasCollection(Collection<Entregas> entregasCollection) {
-        this.entregasCollection = entregasCollection;
     }
 
     public Departamentos getCodiDepa() {
