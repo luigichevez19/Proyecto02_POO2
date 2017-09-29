@@ -39,7 +39,6 @@ public class TipoUsuarios implements Serializable {
     @Column(name = "codi_tipo")
     private Integer codiTipo;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_tipo")
     private String nombTipo;
