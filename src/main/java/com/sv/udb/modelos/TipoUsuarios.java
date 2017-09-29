@@ -6,18 +6,23 @@
 package com.sv.udb.modelos;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,9 +44,12 @@ public class TipoUsuarios implements Serializable {
     @Column(name = "codi_tipo")
     private Integer codiTipo;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_tipo")
     private String nombTipo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiTipo", fetch = FetchType.EAGER)
+    private Collection<Usuarios> usuariosCollection;
 
     public TipoUsuarios() {
     }
@@ -69,6 +77,15 @@ public class TipoUsuarios implements Serializable {
 
     public void setNombTipo(String nombTipo) {
         this.nombTipo = nombTipo;
+    }
+
+    @XmlTransient
+    public Collection<Usuarios> getUsuariosCollection() {
+        return usuariosCollection;
+    }
+
+    public void setUsuariosCollection(Collection<Usuarios> usuariosCollection) {
+        this.usuariosCollection = usuariosCollection;
     }
 
     @Override

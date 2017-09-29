@@ -6,7 +6,9 @@
 package com.sv.udb.modelos;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,10 +19,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -46,23 +50,30 @@ public class Escuelas implements Serializable {
     @Column(name = "codi_escu")
     private Integer codiEscu;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "nomb_escu")
     private String nombEscu;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "nomb_enca")
     private String nombEnca;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "cant_alum")
     private int cantAlum;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 300)
     @Column(name = "dire")
     private String dire;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "esta")
     private boolean esta;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiEscu", fetch = FetchType.EAGER)
+    private Collection<Entregas> entregasCollection;
     @JoinColumn(name = "codi_depa", referencedColumnName = "codi_depa")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Departamentos codiDepa;
@@ -129,6 +140,15 @@ public class Escuelas implements Serializable {
 
     public void setEsta(boolean esta) {
         this.esta = esta;
+    }
+
+    @XmlTransient
+    public Collection<Entregas> getEntregasCollection() {
+        return entregasCollection;
+    }
+
+    public void setEntregasCollection(Collection<Entregas> entregasCollection) {
+        this.entregasCollection = entregasCollection;
     }
 
     public Departamentos getCodiDepa() {
