@@ -47,12 +47,10 @@ public class Usuarios implements Serializable {
     @Column(name = "codi_usua")
     private Integer codiUsua;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_usua")
     private String nombUsua;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "esta")
     private boolean esta;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiUsua", fetch = FetchType.EAGER)

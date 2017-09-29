@@ -44,7 +44,6 @@ public class EstadosEntrega implements Serializable {
     @Column(name = "codi_esta")
     private Integer codiEsta;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_esta")
     private String nombEsta;

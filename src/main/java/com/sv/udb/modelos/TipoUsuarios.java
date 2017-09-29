@@ -43,7 +43,6 @@ public class TipoUsuarios implements Serializable {
     @Column(name = "codi_tipo")
     private Integer codiTipo;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "nomb_tipo")
     private int nombTipo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiTipo", fetch = FetchType.EAGER)
