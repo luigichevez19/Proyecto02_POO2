@@ -44,6 +44,7 @@ public class Departamentos implements Serializable {
     @Column(name = "codi_depa")
     private Integer codiDepa;
     @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_depa")
     private String nombDepa;

@@ -49,19 +49,23 @@ public class Lotes implements Serializable {
     @Column(name = "codi_lote")
     private Integer codiLote;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "cant")
     private int cant;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "fech_venc")
     @Temporal(TemporalType.DATE)
     private Date fechVenc;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "fech_regi")
     @Temporal(TemporalType.DATE)
     private Date fechRegi;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "prec")
-    private int prec;
+    private double prec;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiLote", fetch = FetchType.EAGER)
     private Collection<Entregas> entregasCollection;
 
@@ -72,7 +76,7 @@ public class Lotes implements Serializable {
         this.codiLote = codiLote;
     }
 
-    public Lotes(Integer codiLote, int cant, Date fechVenc, Date fechRegi, int prec) {
+    public Lotes(Integer codiLote, int cant, Date fechVenc, Date fechRegi, double prec) {
         this.codiLote = codiLote;
         this.cant = cant;
         this.fechVenc = fechVenc;
@@ -112,11 +116,11 @@ public class Lotes implements Serializable {
         this.fechRegi = fechRegi;
     }
 
-    public int getPrec() {
+    public double getPrec() {
         return prec;
     }
 
-    public void setPrec(int prec) {
+    public void setPrec(double prec) {
         this.prec = prec;
     }
 
