@@ -86,6 +86,10 @@ and open the template in the editor.
                             <f:facet name="header">Departamento</f:facet>
                             <h:outputText value="#{fila.codiDepa.nombDepa}"/>
                         </h:column>
+                         <h:column pt:data-sortable="true" pt:data-field="esta">
+                            <f:facet name="header">Estado</f:facet>
+                            <h:outputText value="#{(fila.esta)?'Activado':'Desactivado'}"/>
+                        </h:column>
                     </h:dataTable>
                 </h:panelGroup>
             </div>
