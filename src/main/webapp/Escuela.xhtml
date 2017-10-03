@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" 
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Escuelas_POO2:::UDB</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!--Plugins Frameworks-->
+        <h:outputScript library="js" name="jquery-3.1.0.min.js" />
+        <h:outputStylesheet library="css" name="bootstrap.min.css"/>
+        <h:outputScript library="js" name="bootstrap.min.js"/>
+        <h:outputStylesheet library="css" name="font-awesome.min.css"/>
+        <!--Plugins Alerta-->
+        <h:outputStylesheet library="css" name="toastr.min.css"/>
+        <h:outputScript library="js" name="toastr.min.js"/>
+        <h:outputScript library="js" name="custom/mens.js"/>
+        <!--Plugins Tablas-->
+        <h:outputStylesheet library="css" name="bootstrap-table.css" />
+        <h:outputStylesheet library="css" name="custom/table.mini.css" />
+        <h:outputScript library="js" name="bootstrap-table.js" />
+        <h:outputScript library="js" name="bootstrap-table-es-AR.min.js" />
+        <!--Plugins Confirmation [Eliminar]-->
+        <h:outputScript library="js" name="bootstrap-tooltip.js"/>
+        <h:outputScript library="js" name="bootstrap-confirmation.js"/>
+        <!--Plugins para escuelas-->
+        <h:outputScript library="js" name="custom/escu.js"/>
+        </h:head>
+    <h:body>
+         <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h:panelGroup id="contTabl">
+                    <div id="barrBtns">
+                        <div class="btn-group btn-group-sm">
+                            <h:form id="toolBar">
+                                <p:remoteCommand name="consTipo" actionListener="#{escuelaBeans.cons()}"
+                                                 update="formTest"/>
+                                <p:remoteCommand name="elimTipo" actionListener="#{escuelaBeans.elim()}" update="contTabl formTest" 
+                                                         oncomplete="INIT_OBJE_TIPO()" global="true"/>
+                                <h:commandLink class="btn btn-success btn-sm" id="btonNuev">
+                                    <i class="fa fa-plus"/>
+                                    <p:ajax listener="#{escuelaBeans.nuev()}" update="formTest" global="true"/>
+                                    Agregar registro
+                                </h:commandLink>
+                            </h:form>
+                        </div>
+                    </div>
+                    <h:dataTable id="tablEscu" value="#{escuelaBeans.listEscuela}"
+                                var="fila" class="boottable" pt:data-toolbar="#barrBtns"
+                                styleClass="table-hover table-bordered table-condensed table-striped table-responsive"
+                                pt:data-show-refresh="false" pt:data-show-toggle="false" pt:data-show-columns="false" 
+                                pt:data-search="true" pt:data-pagination="true" pt:data-page-list="[5, 10, 20, 50]"
+                                pt:data-click-to-select="true"  pt:data-select-item-name="radio"
+                                pt:data-single-select="true" columnClasses="col-md-1 col-md-11">
+                        <h:column pt:data-field="state" pt:data-checkbox="true">
+                        </h:column>
+                        <h:column pt:data-align="right" pt:data-sortable="true" pt:data-field="id" pt:data-visible="false">
+                            <f:facet name="header">Código</f:facet>
+                            <h:outputText value="#{fila.codiEscu}"/>
+                        </h:column>
+                        <h:column pt:data-sortable="true" pt:data-field="nombEscu">
+                            <f:facet name="header">Nombre</f:facet>
+                            <h:outputText value="#{fila.nombEscu}"/>
+                        </h:column>
+                         <h:column pt:data-sortable="true" pt:data-field="nombEnca">
+                            <f:facet name="header">Nombre Encargado</f:facet>
+                            <h:outputText value="#{fila.nombEnca}"/>
+                        </h:column>
+                         <h:column pt:data-sortable="true" pt:data-field="cant">
+                            <f:facet name="header"># Estudiantes</f:facet>
+                            <h:outputText value="#{fila.cantAlum}"/>
+                        </h:column>
+                         <h:column pt:data-sortable="true" pt:data-field="dire">
+                            <f:facet name="header">Dirección</f:facet>
+                            <h:outputText value="#{fila.dire}"/>
+                        </h:column>
+                         <h:column pt:data-sortable="true" pt:data-field="depa">
+                            <f:facet name="header">Departamento</f:facet>
+                            <h:outputText value="#{fila.codiDepa.nombDepa}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Modal -->
+            <div class="modal fade" id="modaFormEscu" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <h:form id="formTest">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">X</button>
+                                <h4 class="modal-title">Mantenimiento de Escuelas</h4>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset>
+                                        <div class="input-group input-group-xs">
+                                            <h:outputLabel  for="nombEscu" value="Nombre Escuela: "/>
+                                            <h:inputText id="nombEscu" class="form-control" value="#{escuelaBeans.objeEscuela.nombEscu}" />
+                                            <h:message for="nombEscu" errorClass="badge badge-danger" />
+                                         </div>
+                                         <div class="input-group input-group-xs">
+                                            <h:outputLabel  for="nombEnca" value="Nombre Encargado: "/>
+                                            <h:inputText id="nombEnca" class="form-control" value="#{escuelaBeans.objeEscuela.nombEnca}" />
+                                            <h:message for="nombEnca" errorClass="badge badge-danger" />
+                                         </div>
+                                         <div class="input-group input-group-xs">
+                                            <h:outputLabel  for="canti" value="Cantidad: "/>
+                                            <h:inputText id="canti" class="form-control" value="#{escuelaBeans.objeEscuela.cantAlum}" />
+                                            <h:message for="canti" errorClass="badge badge-danger" />
+                                         </div>
+                                         <div class="input-group input-group-xs">
+                                            <h:outputLabel  for="dire" value="Dirección: "/>
+                                            <h:inputText id="dire" class="form-control" value="#{escuelaBeans.objeEscuela.dire}" />
+                                            <h:message for="dire" errorClass="badge badge-danger" />
+                                         </div>
+                                        <div class="input-group input-group-xs">
+                                            <h:outputLabel  for="depa" value="Departamento: "/>
+                                            <h:selectOneMenu id="depa" class="form-control" value="#{escuelaBeans.objeEscuela.codiDepa}">
+
+                                                <f:selectItems value="#{depaBeans.listDepartamento}" var="temp" 
+                                                               itemLabel="#{temp.nombDepa}" itemValue="#{temp}"  />
+                                                <f:converter converterId="PooConv"/>
+                                            </h:selectOneMenu>
+                                            <h:message for="depa" errorClass="badge badge-danger" />
+                                         </div>
+                                        <div class="input-group input-group-xs">
+                                           <h:outputLabel  for="esta" value="Estado:"/>
+                                           <h:selectBooleanCheckbox id="esta" class="form-control" value="#{escuelaBeans.objeEscuela.esta}"/>
+                                         </div>
+                                 </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="btn-group">
+                                    <ui:fragment rendered="#{escuelaBeans.guardando}">
+                                        <h:commandLink class="btn btn-success btn-sm" id="btonTest">
+                                            <i class="fa fa-plus"/>
+                                            <p:ajax listener="#{escuelaBeans.guar()}" process="@form" 
+                                                    update="@form :contTabl" oncomplete="INIT_OBJE_TIPO()" global="true"/>
+                                            Guardar
+                                        </h:commandLink>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{not escuelaBeans.guardando}">
+                                        <h:commandLink class="btn btn-primary btn-sm" id="btonEdit">
+                                            <i class="fa fa-edit"/>
+                                            <p:ajax listener="#{escuelaBeans.edit()}" process="@form" 
+                                                    update="@form :contTabl" oncomplete="INIT_OBJE_TIPO()" global="true"/>
+                                            Modificar
+                                        </h:commandLink>
+                                        <!--
+                                            # Para corregir el error que redirecciona hice una serie de pasos
+                                            1. Actualizar el bootstrap-confirmation, yo usé este: http://bootstrap-confirmation.js.org/
+                                            2. Quitar la referencia: bootstrap-confirmation.min.js del fragmento head.xhtml
+                                            3. Modifiqué el custom tipo.js(en este ejemplo) quitando la función y dejando todo en una sola línea
+                                            4. Y por último y lo mas importante que creo era lo único necesario al elemento h:outputLink le agregué el value="#"
+                                        -->
+                                        <h:outputLink id="btonElim" class="btn btn-danger btn-sm" value="#" pt:data-placement="left"
+                                                      pt:data-toggle="confirmation" pt:data-btn-ok-label="Sí" pt:data-btn-ok-icon="fa fa-trash-o"
+                                                      pt:data-btn-ok-class="btn-danger btn-xs" pt:data-btn-cancel-label="No" pt:data-btn-cancel-icon="fa fa-mail-forward"
+                                                      pt:data-btn-cancel-class="btn-default btn-xs" pt:data-title="¿Está seguro que desea eliminar?"
+                                                      pt:data-on-confirm="elimTipo"><!--data-on-confirm = nombre del comando remoto de eliminar (sin paréntesis)-->
+                                            <i class="fa fa-times"/> Eliminar
+                                        </h:outputLink>
+                                    </ui:fragment>
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
