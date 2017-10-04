@@ -85,7 +85,8 @@ public class LoteBeans implements Serializable {
         try
         {
             this.objeLote.setFechRegi(new java.util.Date());
-             this.objeLote.setFechVenc(new java.util.Date());
+            System.out.println(this.objeLote.getFechVenc());
+             //this.objeLote.setFechVenc(new java.util.Date());
             this.lotesFacade.create(this.objeLote);
             this.listLote.add(this.objeLote);
             this.objeLote = new Lotes();

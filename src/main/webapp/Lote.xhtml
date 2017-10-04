@@ -70,14 +70,18 @@ and open the template in the editor.
                             <f:facet name="header">Cantidad</f:facet>
                             <h:outputText value="#{fila.cant}"/>
                         </h:column>
-                         <h:column pt:data-sortable="true" pt:data-field="nombEnca">
-                            <f:facet name="header">Fecha Vencimiento</f:facet>
-                            <h:outputText value="#{fila.fechVenc}"/>
-                        </h:column>
-                         <h:column pt:data-sortable="true" pt:data-field="cant">
+                        <h:column pt:data-sortable="true" pt:data-field="fechRegi">
                             <f:facet name="header">Fecha de registro</f:facet>
-                            <h:outputText value="#{fila.fechRegi}"/>
+                            <h:outputText value="#{fila.fechRegi}">
+                                <f:convertDateTime pattern="dd/MM/YYYY"/>
+                            </h:outputText>
                         </h:column> 
+                         <h:column pt:data-sortable="true" pt:data-field="fechaVenc">
+                            <f:facet name="header">Fecha Vencimiento</f:facet>
+                            <h:outputText value="#{fila.fechVenc}">
+                                 <f:convertDateTime pattern="dd/MM/YYYY"/>
+                            </h:outputText>
+                         </h:column>
                         <h:column pt:data-sortable="true" pt:data-field="prec">
                             <f:facet name="header">Precio</f:facet>
                             <h:outputText value="#{fila.prec}"/>
@@ -94,7 +98,7 @@ and open the template in the editor.
                         <h:form id="formTest">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">X</button>
-                                <h4 class="modal-title">Mantenimiento de Escuelas</h4>
+                                <h4 class="modal-title">Mantenimiento de Lotes</h4>
                             </div>
                             <div class="modal-body">
                                 <fieldset>
@@ -103,8 +107,13 @@ and open the template in the editor.
                                             <h:inputText id="canti" class="form-control" value="#{loteBeans.objeLote.cant}" />
                                             <h:message for="canti" errorClass="badge badge-danger" />
                                          </div>
-                                           
-                                                                               
+                                        <div class="input-group input-group-xs">
+                                            <h:outputLabel  for="fech" value="Fecha vencimiento(dd/MM/yyyy): "/>
+                                                 <p:calendar value="#{loteBeans.objeLote.fechVenc}" id="fech" pattern="dd/MM/yyyy" mode="popup" showOn="button">
+                                                     <f:convertDateTime type="date"  dateStyle="short" pattern="dd/MM/yyyy" />
+                                                </p:calendar>
+                                            <h:message for="fech" errorClass="badge badge-danger" />
+                                        </div>
                                          <div class="input-group input-group-xs">
                                             <h:outputLabel  for="prec" value="Precio: "/>
                                             <h:inputText id="prec" class="form-control" value="#{loteBeans.objeLote.prec}" />
