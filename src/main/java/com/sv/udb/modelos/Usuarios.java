@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuarios.findAll", query = "SELECT u FROM Usuarios u")
     , @NamedQuery(name = "Usuarios.findByCodiUsua", query = "SELECT u FROM Usuarios u WHERE u.codiUsua = :codiUsua")
     , @NamedQuery(name = "Usuarios.findByNombUsua", query = "SELECT u FROM Usuarios u WHERE u.nombUsua = :nombUsua")
+    , @NamedQuery(name = "Usuarios.findByContra", query = "SELECT u FROM Usuarios u WHERE u.contra = :contra")
     , @NamedQuery(name = "Usuarios.findByEsta", query = "SELECT u FROM Usuarios u WHERE u.esta = :esta")})
 public class Usuarios implements Serializable {
 
@@ -47,12 +48,14 @@ public class Usuarios implements Serializable {
     @Column(name = "codi_usua")
     private Integer codiUsua;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nomb_usua")
     private String nombUsua;
     @Basic(optional = false)
-    @NotNull
+    @Size(min = 1, max = 300)
+    @Column(name = "contra")
+    private String contra;
+    @Basic(optional = false)
     @Column(name = "esta")
     private boolean esta;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiUsua", fetch = FetchType.EAGER)
@@ -68,9 +71,10 @@ public class Usuarios implements Serializable {
         this.codiUsua = codiUsua;
     }
 
-    public Usuarios(Integer codiUsua, String nombUsua, boolean esta) {
+    public Usuarios(Integer codiUsua, String nombUsua, String contra, boolean esta) {
         this.codiUsua = codiUsua;
         this.nombUsua = nombUsua;
+        this.contra = contra;
         this.esta = esta;
     }
 
@@ -88,6 +92,14 @@ public class Usuarios implements Serializable {
 
     public void setNombUsua(String nombUsua) {
         this.nombUsua = nombUsua;
+    }
+
+    public String getContra() {
+        return contra;
+    }
+
+    public void setContra(String contra) {
+        this.contra = contra;
     }
 
     public boolean getEsta() {

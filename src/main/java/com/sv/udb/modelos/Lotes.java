@@ -49,21 +49,17 @@ public class Lotes implements Serializable {
     @Column(name = "codi_lote")
     private Integer codiLote;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "cant")
     private int cant;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "fech_venc")
     @Temporal(TemporalType.DATE)
     private Date fechVenc;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "fech_regi")
     @Temporal(TemporalType.DATE)
     private Date fechRegi;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "prec")
     private double prec;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codiLote", fetch = FetchType.EAGER)
