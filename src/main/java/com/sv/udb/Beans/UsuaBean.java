@@ -21,6 +21,7 @@ import org.primefaces.context.RequestContext;
  *
  * @author Oscar
  */
+//Walter
 @Named(value = "usuaBean")
 @ViewScoped
 public class UsuaBean implements Serializable{
