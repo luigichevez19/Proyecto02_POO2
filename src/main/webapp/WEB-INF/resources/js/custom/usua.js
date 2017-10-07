@@ -8,7 +8,7 @@ $(document).ready(function() {
         return false;
     };
     
-    $('#modaFormTipo').on('show.bs.modal', function() {
+    $('#modaFormUsua').on('show.bs.modal', function() {
         INIT_OBJE_MODA_TIPO();
     });
     

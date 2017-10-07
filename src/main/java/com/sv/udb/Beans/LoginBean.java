@@ -106,13 +106,13 @@ public class LoginBean implements Serializable{
                 //VERIFICANDO SI ES USUARIO MASTER
                 if(!us.getCodiTipo().getNombTipo().equals("Master"))
                 {
-                    contex.getExternalContext().redirect("./../menu.xhtml");
+                    contex.getExternalContext().redirect("menu.xhtml");
                 }               
                 
             }
             else
             {
-                contex.getExternalContext().redirect("./../login.xhtml");
+                contex.getExternalContext().redirect("login.xhtml");
             }
         } 
         catch (Exception e) 
@@ -129,7 +129,7 @@ public class LoginBean implements Serializable{
             Usuarios us =(Usuarios) contex.getExternalContext().getSessionMap().get("usuario");
             if(us == null)
             {
-                contex.getExternalContext().redirect("./../login.xhtml");
+                contex.getExternalContext().redirect("login.xhtml");
             }
         } 
         catch (Exception e) 

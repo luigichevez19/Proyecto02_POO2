@@ -21,7 +21,6 @@ import org.primefaces.context.RequestContext;
  *
  * @author Oscar
  */
-//Walter
 @Named(value = "usuaBean")
 @ViewScoped
 public class UsuaBean implements Serializable{
@@ -74,8 +73,7 @@ public class UsuaBean implements Serializable{
     {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         Map<String, String> mapaPrms = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        int codi = Integer.parseInt(mapaPrms.get("codiUsua"));
-        
+        int codi = Integer.parseInt(mapaPrms.get("codiUsua"));        
         this.objeUsua = this.usuaFacade.find(codi);
         this.guardando = false;
         ctx.execute("$('#modaFormUsua').modal('show')");
@@ -105,11 +103,14 @@ public class UsuaBean implements Serializable{
     {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         try
-        {
+        {   
+            System.out.println("esta es la clave: " + this.objeUsua.getContra());
             this.usuaFacade.edit(this.objeUsua);
+            
             this.setItem(this.objeUsua);
             this.objeUsua = new Usuarios();
             this.guardando = true;
+            ctx.execute("$('#modaFormUsua').modal('hide')");
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos modificados')");
         }
         catch(Exception ex)
@@ -131,6 +132,7 @@ public class UsuaBean implements Serializable{
             this.listUsua.remove(this.objeUsua);
             this.objeUsua = new Usuarios();
             this.guardando = true;
+            ctx.execute("$('#modaFormUsua').modal('hide')");
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos eliminados')");
         }
         catch(Exception ex)
