@@ -33,6 +33,7 @@ public class DepaBeans implements Serializable {
     /**
      * Creates a new instance of TiposBean
      */
+    //Chevez
     public DepaBeans() {
     }
 
