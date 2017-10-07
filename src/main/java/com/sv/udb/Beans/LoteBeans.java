@@ -85,12 +85,20 @@ public class LoteBeans implements Serializable {
         try
         {
             this.objeLote.setFechRegi(new java.util.Date());
-            System.out.println(this.objeLote.getFechVenc());
-             //this.objeLote.setFechVenc(new java.util.Date());
-            this.lotesFacade.create(this.objeLote);
-            this.listLote.add(this.objeLote);
-            this.objeLote = new Lotes();
-            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
+            int resp =(int) ((this.objeLote.getFechVenc().getTime()- this.objeLote.getFechRegi().getTime())/86400000);
+            if((this.objeLote.getFechVenc().after(this.objeLote.getFechRegi())) && resp >= 30 )
+            {
+                this.lotesFacade.create(this.objeLote);
+                this.listLote.add(this.objeLote);
+                this.objeLote = new Lotes();
+                ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')"); 
+            }
+            else
+            {
+                ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error con la fecha de vencimiento, recuerde que la fecha no puede ser muy reciente(Debe de ser un mes de diferencia)')"); 
+            }
+            
+            
         }
         catch(Exception ex)
         {
@@ -107,11 +115,20 @@ public class LoteBeans implements Serializable {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         try
         {
-            this.lotesFacade.edit(this.objeLote);
-            this.setItem(this.objeLote);
-            this.objeLote = new Lotes();
-            this.guardando = true;
-            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos modificados')");
+            int resp =(int) ((this.objeLote.getFechVenc().getTime()- this.objeLote.getFechRegi().getTime())/86400000);
+            if((this.objeLote.getFechVenc().after(this.objeLote.getFechRegi())) && resp >= 30 )
+            {
+                this.lotesFacade.edit(this.objeLote);
+                this.setItem(this.objeLote);
+                this.objeLote = new Lotes();
+                this.guardando = true;
+                ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos modificados')");
+            }
+            else
+            {
+                ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error con la fecha de vencimiento, recuerde que la fecha no puede ser muy reciente(Debe de ser un mes de diferencia)')"); 
+            }
+            
         }
         catch(Exception ex)
         {
