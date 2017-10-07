@@ -33,9 +33,9 @@ and open the template in the editor.
         <h:outputScript library="js" name="bootstrap-confirmation.js"/>
         <!--Plugins para tipos-->
         <h:outputScript library="js" name="custom/tipoUsua.js"/>
-        <!--VERIFICA LA SESION-->
         <f:event type="preRenderView" listener="#{loginBean.verifiSesMast()}"/>
     </h:head>
+    
     <h:body>
         <h:form>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -110,6 +110,7 @@ and open the template in the editor.
             </div><!-- /.container-fluid -->
         </nav>
         </h:form>
+        
          <br/>
             <br/>
                 <br/>
@@ -120,7 +121,7 @@ and open the template in the editor.
                     <div id="barrBtns">
                         <div class="btn-group btn-group-sm">
                             <h:form id="toolBar">
-                                <p:remoteCommand name="conTipo" actionListener="#{tipoUsuaBean.cons()}"
+                                <p:remoteCommand name="consTipo" actionListener="#{tipoUsuaBean.cons()}"
                                                  update="formTest"/>
                                 <p:remoteCommand name="elimLibro" actionListener="#{tipoUsuaBean.elim()}" update="contTabl formTest" 
                                                          oncomplete="INIT_OBJE_TIPO()" global="true"/>

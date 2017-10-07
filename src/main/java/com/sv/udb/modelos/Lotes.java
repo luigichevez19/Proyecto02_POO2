@@ -151,7 +151,7 @@ public class Lotes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.sv.udb.modelos.Lotes[ codiLote=" + codiLote + " ]";
+        return "" + codiLote;
     }
     
 }
