@@ -5,9 +5,11 @@
  */
 package com.sv.udb.Beans;
 
-import com.sv.udb.controladores.UsuariosFacadeLocal;
-import com.sv.udb.modelos.Usuarios;
+import com.sv.udb.controladores.EntregasFacadeLocal;
+import com.sv.udb.modelos.Entregas;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -19,66 +21,65 @@ import org.primefaces.context.RequestContext;
 
 /**
  *
- * @author Oscar
+ * @author walte
  */
-//Walter
-@Named(value = "usuaBean")
+@Named(value = "entregaBeans")
 @ViewScoped
-public class UsuaBean implements Serializable{
+public class EntregaBeans implements Serializable{
 
-    /**
-     * Creates a new instance of UsuaBean
-     */
-    
     @EJB
-    private UsuariosFacadeLocal usuaFacade;
+    private EntregasFacadeLocal entregasFacade;
+
+    private boolean guardado;
+    private Entregas objeEntr;
+    private List<Entregas> listEntr;
     
-    private boolean guardando;
-    private Usuarios objeUsua;
-    private List<Usuarios> listUsua;
+    /**
+     * Creates a new instance of EntregaBeans
+     */
+    public EntregaBeans() {
+    }
+
+    public boolean isGuardado() {
+        return guardado;
+    }
+
+    public Entregas getObjeEntr() {
+        return objeEntr;
+    }
+
+    public void setObjeEntr(Entregas objeEntr) {
+        this.objeEntr = objeEntr;
+    }
+
+    public List<Entregas> getListEntr() {
+        return listEntr;
+    }
     
-    public UsuaBean() {
-    }
-
-    public Usuarios getObjeUsua() {
-        return objeUsua;
-    }
-
-    public void setObjeUsua(Usuarios objeUsua) {
-        this.objeUsua = objeUsua;
-    }
-
-    public boolean isGuardando() {
-        return guardando;
-    }
-
-    public List<Usuarios> getListUsua() {
-        return listUsua;
-    }
-    
+    //Se ejecuta despues de que la página carga
     @PostConstruct
     public void init()
     {
-        this.objeUsua = new Usuarios();
-        this.listUsua = this.usuaFacade.findAll();       
+        this.objeEntr = new Entregas();
+        this.listEntr = this.entregasFacade.findAll();
     }
-     public void nuev()
+    
+    public void nuev()
     {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
-        this.objeUsua = new Usuarios();
-        this.guardando = true;
-        ctx.execute("$('#modaFormUsua').modal('show')");
+        this.objeEntr = new Entregas();
+        this.guardado = true;
+        ctx.execute("$('#modaFormTipo').modal('show')");
     }
     
     public void cons()
     {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         Map<String, String> mapaPrms = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        int codi = Integer.parseInt(mapaPrms.get("codiUsua"));
-        
-        this.objeUsua = this.usuaFacade.find(codi);
-        this.guardando = false;
-        ctx.execute("$('#modaFormUsua').modal('show')");
+        int codi = Integer.parseInt(mapaPrms.get("id"));
+        this.objeEntr = this.entregasFacade.find(codi);
+        this.guardado = false;
+        ctx.execute("$('#modaFormTipo').modal('show')");
     }
     
     public void guar()
@@ -86,13 +87,17 @@ public class UsuaBean implements Serializable{
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         try
         {
-            this.usuaFacade.create(this.objeUsua);
-            this.listUsua.add(this.objeUsua);
-            this.objeUsua = new Usuarios();
+            Date ahora = new Date();
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+            this.objeEntr.setFecha(ahora);
+            this.entregasFacade.create(this.objeEntr);
+            this.listEntr.add(this.objeEntr);
+            this.objeEntr = new Entregas();
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
         }
         catch(Exception ex)
         {
+            ex.printStackTrace();
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
         }
         finally
@@ -106,10 +111,10 @@ public class UsuaBean implements Serializable{
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         try
         {
-            this.usuaFacade.edit(this.objeUsua);
-            this.setItem(this.objeUsua);
-            this.objeUsua = new Usuarios();
-            this.guardando = true;
+            this.entregasFacade.edit(this.objeEntr);
+            this.setItem(this.objeEntr);
+            this.objeEntr = new Entregas();
+            this.guardado = true;
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos modificados')");
         }
         catch(Exception ex)
@@ -127,10 +132,10 @@ public class UsuaBean implements Serializable{
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         try
         {
-            this.usuaFacade.remove(objeUsua);
-            this.listUsua.remove(this.objeUsua);
-            this.objeUsua = new Usuarios();
-            this.guardando = true;
+            this.entregasFacade.remove(this.objeEntr);
+            this.listEntr.remove(this.objeEntr);
+            this.objeEntr = new Entregas();
+            this.guardado = true;
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos eliminados')");
         }
         catch(Exception ex)
@@ -143,12 +148,11 @@ public class UsuaBean implements Serializable{
         }
     }
     
-    private void setItem(Usuarios item)
+    private void setItem(Entregas item)
     {
-        int itemIndex = this.listUsua.indexOf(item);
+        int itemIndex = this.listEntr.indexOf(item);
             if (itemIndex != -1) {
-            this.listUsua.set(itemIndex, item);
+            this.listEntr.set(itemIndex, item);
         }
     }
-    
 }
