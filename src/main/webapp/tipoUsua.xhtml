@@ -11,8 +11,8 @@ and open the template in the editor.
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Lotes_POO2:::UDB</title>
+   <h:head>
+        <title>Tipo de usuario:UDB</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <!--Plugins Frameworks-->
         <h:outputScript library="js" name="jquery-3.1.0.min.js" />
@@ -31,10 +31,11 @@ and open the template in the editor.
         <!--Plugins Confirmation [Eliminar]-->
         <h:outputScript library="js" name="bootstrap-tooltip.js"/>
         <h:outputScript library="js" name="bootstrap-confirmation.js"/>
-        <!--Plugins para lotes-->
-        <h:outputScript library="js" name="custom/lote.js"/>
-        </h:head>
-    <f:event type="preRenderView" listener="#{loginBean.verifiSes()}"/>
+        <!--Plugins para tipos-->
+        <h:outputScript library="js" name="custom/tipoUsua.js"/>
+        <!--VERIFICA LA SESION-->
+        <f:event type="preRenderView" listener="#{loginBean.verifiSesMast()}"/>
+    </h:head>
     <h:body>
         <h:form>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -109,29 +110,31 @@ and open the template in the editor.
             </div><!-- /.container-fluid -->
         </nav>
         </h:form>
-        <br/>
+         <br/>
             <br/>
                 <br/>
                     <br/>
-         <div class="row">
+        <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h:panelGroup id="contTabl">
                     <div id="barrBtns">
                         <div class="btn-group btn-group-sm">
                             <h:form id="toolBar">
-                                <p:remoteCommand name="consTipo" actionListener="#{loteBeans.cons()}"
+                                <p:remoteCommand name="conTipo" actionListener="#{tipoUsuaBean.cons()}"
                                                  update="formTest"/>
-                                <p:remoteCommand name="elimTipo" actionListener="#{loteBeans.elim()}" update="contTabl formTest" 
+                                <p:remoteCommand name="elimLibro" actionListener="#{tipoUsuaBean.elim()}" update="contTabl formTest" 
                                                          oncomplete="INIT_OBJE_TIPO()" global="true"/>
                                 <h:commandLink class="btn btn-success btn-sm" id="btonNuev">
                                     <i class="fa fa-plus"/>
-                                    <p:ajax listener="#{loteBeans.nuev()}" update="formTest" global="true"/>
+                                    <p:ajax listener="#{tipoUsuaBean.nuev()}" update="formTest" global="true"/>
                                     Agregar registro
                                 </h:commandLink>
                             </h:form>
                         </div>
                     </div>
-                    <h:dataTable id="tablLote" value="#{loteBeans.listLote}"
+                    
+                    <!--TABLA-->
+                    <h:dataTable id="tablTipo" value="#{tipoUsuaBean.listUsua}"
                                 var="fila" class="boottable" pt:data-toolbar="#barrBtns"
                                 styleClass="table-hover table-bordered table-condensed table-striped table-responsive"
                                 pt:data-show-refresh="false" pt:data-show-toggle="false" pt:data-show-columns="false" 
@@ -140,79 +143,58 @@ and open the template in the editor.
                                 pt:data-single-select="true" columnClasses="col-md-1 col-md-11">
                         <h:column pt:data-field="state" pt:data-checkbox="true">
                         </h:column>
+                        
                         <h:column pt:data-align="right" pt:data-sortable="true" pt:data-field="id" pt:data-visible="false">
                             <f:facet name="header">Código</f:facet>
-                            <h:outputText value="#{fila.codiLote}"/>
+                            <h:outputText value="#{fila.codiTipo}"/>
                         </h:column>
-                        <h:column pt:data-sortable="true" pt:data-field="nombEscu">
-                            <f:facet name="header">Cantidad</f:facet>
-                            <h:outputText value="#{fila.cant}"/>
+                        
+                        <h:column pt:data-sortable="true" pt:data-field="nomb">
+                            <f:facet name="header">Nombre</f:facet>
+                            <h:outputText value="#{fila.nombTipo}"/>
                         </h:column>
-                        <h:column pt:data-sortable="true" pt:data-field="fechRegi">
-                            <f:facet name="header">Fecha de registro</f:facet>
-                            <h:outputText value="#{fila.fechRegi}">
-                                <f:convertDateTime pattern="dd/MM/YYYY"/>
-                            </h:outputText>
-                        </h:column> 
-                         <h:column pt:data-sortable="true" pt:data-field="fechaVenc">
-                            <f:facet name="header">Fecha Vencimiento</f:facet>
-                            <h:outputText value="#{fila.fechVenc}">
-                                 <f:convertDateTime pattern="dd/MM/YYYY"/>
-                            </h:outputText>
-                         </h:column>
-                        <h:column pt:data-sortable="true" pt:data-field="prec">
-                            <f:facet name="header">Precio</f:facet>
-                            <h:outputText value="#{fila.prec}"/>
-                        </h:column> 
+                                                
+                        
                     </h:dataTable>
                 </h:panelGroup>
             </div>
         </div>
         <div class="row">
+            
             <!-- Modal -->
-            <div class="modal fade" id="modaFormLote" role="dialog">
+            <div class="modal fade" id="modaFormTipo" role="dialog">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <h:form id="formTest">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">X</button>
-                                <h4 class="modal-title">Mantenimiento de Lotes</h4>
+                                <h4 class="modal-title">Tipo de Usuario</h4>
                             </div>
                             <div class="modal-body">
                                 <fieldset>
-                                        <div class="input-group input-group-xs">
-                                            <h:outputLabel  for="canti" value="Cantidad: "/>
-                                            <h:inputText id="canti" class="form-control" value="#{loteBeans.objeLote.cant}" />
-                                            <h:message for="canti" errorClass="badge badge-danger" />
-                                         </div>
-                                        <div class="input-group input-group-xs">
-                                            <h:outputLabel  for="fech" value="Fecha vencimiento(dd/MM/yyyy): "/>
-                                                 <p:calendar value="#{loteBeans.objeLote.fechVenc}" id="fech" pattern="dd/MM/yyyy" mode="popup" showOn="button">
-                                                     <f:convertDateTime type="date"  dateStyle="short" pattern="dd/MM/yyyy" />
-                                                </p:calendar>
-                                            <h:message for="fech" errorClass="badge badge-danger" />
-                                        </div>
-                                         <div class="input-group input-group-xs">
-                                            <h:outputLabel  for="prec" value="Precio: "/>
-                                            <h:inputText id="prec" class="form-control" value="#{loteBeans.objeLote.prec}" />
-                                            <h:message for="prec" errorClass="badge badge-danger" />
-                                         </div>
-                                 </fieldset>
+                                    <div class="input-group input-group-xs">
+                                        <h:outputLabel  for="nomb" value="Nombre: "/>
+                                        <h:inputText id="nomb" class="form-control" value="#{tipoUsuaBean.objeTipo.nombTipo}" />
+                                        <h:message for="nomb" errorClass="badge badge-danger" />
+                                    </div>
+                                    
+                                    
+                                </fieldset>
                             </div>
                             <div class="modal-footer">
                                 <div class="btn-group">
-                                    <ui:fragment rendered="#{loteBeans.guardando}">
+                                    <ui:fragment rendered="#{tipoUsuaBean.guardando}">
                                         <h:commandLink class="btn btn-success btn-sm" id="btonTest">
                                             <i class="fa fa-plus"/>
-                                            <p:ajax listener="#{loteBeans.guar()}" process="@form" 
+                                            <p:ajax listener="#{tipoUsuaBean.guar()}" process="@form" 
                                                     update="@form :contTabl" oncomplete="INIT_OBJE_TIPO()" global="true"/>
                                             Guardar
                                         </h:commandLink>
                                     </ui:fragment>
-                                    <ui:fragment rendered="#{not loteBeans.guardando}">
+                                    <ui:fragment rendered="#{not tipoUsuaBean.guardando}">
                                         <h:commandLink class="btn btn-primary btn-sm" id="btonEdit">
                                             <i class="fa fa-edit"/>
-                                            <p:ajax listener="#{loteBeans.edit()}" process="@form" 
+                                            <p:ajax listener="#{tipoUsuaBean.edit()}" process="@form" 
                                                     update="@form :contTabl" oncomplete="INIT_OBJE_TIPO()" global="true"/>
                                             Modificar
                                         </h:commandLink>
@@ -227,7 +209,7 @@ and open the template in the editor.
                                                       pt:data-toggle="confirmation" pt:data-btn-ok-label="Sí" pt:data-btn-ok-icon="fa fa-trash-o"
                                                       pt:data-btn-ok-class="btn-danger btn-xs" pt:data-btn-cancel-label="No" pt:data-btn-cancel-icon="fa fa-mail-forward"
                                                       pt:data-btn-cancel-class="btn-default btn-xs" pt:data-title="¿Está seguro que desea eliminar?"
-                                                      pt:data-on-confirm="elimTipo"><!--data-on-confirm = nombre del comando remoto de eliminar (sin paréntesis)-->
+                                                      pt:data-on-confirm="elimLibro"><!--data-on-confirm = nombre del comando remoto de eliminar (sin paréntesis)-->
                                             <i class="fa fa-times"/> Eliminar
                                         </h:outputLink>
                                     </ui:fragment>
@@ -238,5 +220,5 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
-    </h:body>
+        </h:body>
 </html>

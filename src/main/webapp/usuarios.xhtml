@@ -33,8 +33,87 @@ and open the template in the editor.
         <h:outputScript library="js" name="bootstrap-confirmation.js"/>
         <!--Plugins para tipos-->
         <h:outputScript library="js" name="custom/usua.js"/>
+        <!--VERIFICA LA SESION-->
+        <f:event type="preRenderView" listener="#{loginBean.verifiSesMast()}"/>
     </h:head>
     <h:body>
+        <h:form>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Proyecto2</a>
+                </div>
+
+                <!-- ITEMS DEL MENU -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <h:commandLink  id="btnLote" action="Lote?faces-redirect=true">                                                                           
+                                Lotes
+                            </h:commandLink>
+                        </li>
+                        
+                        <li>
+                            <h:commandLink  id="btnEntrega" action="entregas?faces-redirect=true">                                                                            
+                                Entregas
+                            </h:commandLink>
+                        </li>
+                        
+                        <!--SOLO SE CARGARA SI ES ADMIN O MASTER-->
+                        <ui:fragment rendered="#{loginBean.verifiMasterMenu()}">
+                            <li> 
+                                <h:commandLink  id="btnDepa" action="Departamento?faces-redirect=true">                                                                               
+                                    Deparatamentos
+                                </h:commandLink>
+                            </li>
+                            <li> 
+                                <h:commandLink  id="btnEscue" action="Escuela?faces-redirect=true">                                                                                
+                                    Escuelas
+                                </h:commandLink>
+                            </li>
+                            <li> 
+                               <h:commandLink  id="btonUsua" action="usuarios?faces-redirect=true">                                                                             
+                                    Usuarios
+                                </h:commandLink>
+                            </li>
+                            <li> 
+                                <h:commandLink  id="btnTipoUsua" action="tipoUsua?faces-redirect=true">                                                                                
+                                    Tipo Usuarios
+                                </h:commandLink>
+                            </li>
+                            <li> 
+                                <h:commandLink  id="btnEstaEntre" action="estadoEntrega?faces-redirect=true">                                                                                
+                                    Estado entrega
+                                </h:commandLink>
+                            </li>
+                        </ui:fragment>
+                        
+
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li>
+                            <p:commandLink  action="#{loginBean.cerrarSesion()}" value="Cerrar sesion">                                
+                            </p:commandLink> 
+                        </li>
+
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        </h:form>
+         <br/>
+            <br/>
+                <br/>
+                    <br/>
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h:panelGroup id="contTabl">
@@ -83,6 +162,10 @@ and open the template in the editor.
                             <f:facet name="header">Estado</f:facet>
                             <h:selectBooleanCheckbox disabled="true" value="#{fila.esta}"/>                                
                         </h:column>
+                        <h:column pt:data-sortable="true" pt:data-field="contra">
+                            <f:facet name="header">Contra</f:facet>
+                            <h:outputText value="#{fila.contra}"/>
+                        </h:column>
                     </h:dataTable>
                 </h:panelGroup>
             </div>
@@ -108,7 +191,7 @@ and open the template in the editor.
                                     <div class="input-group input-group-xs">
                                         <h:outputLabel  for="tipo" value="Tipo:"/>                                        
                                         <h:selectOneMenu id="tipo" class="form-control" value="#{usuaBean.objeUsua.codiTipo}">                                            
-                                            <f:selectItems value="#{tipoUsuaBean.listTipo}" var="temp" itemLabel="#{temp.nombTipo}" itemValue="#{temp}"/>
+                                            <f:selectItems value="#{tipoUsuaBean.listUsua}" var="temp" itemLabel="#{temp.nombTipo}" itemValue="#{temp}"/>
                                             <f:converter converterId="PooConv"/>
                                         </h:selectOneMenu>                                                                                
                                         <h:message for="tipo" errorClass="badge badge-danger" />
@@ -118,6 +201,13 @@ and open the template in the editor.
                                         <h:selectBooleanCheckbox id="esta" class="form-control" value="#{usuaBean.objeUsua.esta}" />
                                         <h:message for="esta" errorClass="badge badge-danger" />
                                     </div>
+                                    
+                                    <ui:fragment rendered="#{usuaBean.guardando}">
+                                        <h:outputLabel  for="inputPassword" value="Password: "/>    
+                                        <p:password id="inputPassword" class="form-control" value="#{usuaBean.objeUsua.contra}"/>
+                                        <h:message for="inputPassword" errorClass="badge badge-danger" />
+                                    </ui:fragment>
+                                                                        
                                     
                                 </fieldset>
                             </div>
