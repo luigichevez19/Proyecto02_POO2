@@ -34,7 +34,85 @@ and open the template in the editor.
         <!--Plugins para escuelas-->
         <h:outputScript library="js" name="custom/escu.js"/>
         </h:head>
+    <f:event type="preRenderView" listener="#{loginBean.verifiSesMast()}"/>
     <h:body>
+        <h:form>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Proyecto2</a>
+                </div>
+
+                <!-- ITEMS DEL MENU -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <h:commandLink  id="btnLote" action="Lote?faces-redirect=true">                                                                           
+                                Lotes
+                            </h:commandLink>
+                        </li>
+                        
+                        <li>
+                            <h:commandLink  id="btnEntrega" action="entregas?faces-redirect=true">                                                                            
+                                Entregas
+                            </h:commandLink>
+                        </li>
+                        
+                        <!--SOLO SE CARGARA SI ES ADMIN O MASTER-->
+                        <ui:fragment rendered="#{loginBean.verifiMasterMenu()}">
+                            <li> 
+                                <h:commandLink  id="btnDepa" action="Departamento?faces-redirect=true">                                                                               
+                                    Deparatamentos
+                                </h:commandLink>
+                            </li>
+                            <li> 
+                                <h:commandLink  id="btnEscue" action="Escuela?faces-redirect=true">                                                                                
+                                    Escuelas
+                                </h:commandLink>
+                            </li>
+                            <li> 
+                               <h:commandLink  id="btonUsua" action="usuarios?faces-redirect=true">                                                                             
+                                    Usuarios
+                                </h:commandLink>
+                            </li>
+                            <li> 
+                                <h:commandLink  id="btnTipoUsua" action="tipoUsua?faces-redirect=true">                                                                                
+                                    Tipo Usuarios
+                                </h:commandLink>
+                            </li>
+                            <li> 
+                                <h:commandLink  id="btnEstaEntre" action="estadoEntrega?faces-redirect=true">                                                                                
+                                    Estado entrega
+                                </h:commandLink>
+                            </li>
+                        </ui:fragment>
+                        
+
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li>
+                            <p:commandLink  action="#{loginBean.cerrarSesion()}" value="Cerrar sesion">                                
+                            </p:commandLink> 
+                        </li>
+
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        </h:form>
+         <br/>
+            <br/>
+                <br/>
+                    <br/>
          <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h:panelGroup id="contTabl">
